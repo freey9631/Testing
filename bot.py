@@ -76,19 +76,16 @@ async def send_to_admins(user_data):
 print("Registering approve_data function...")
 
 # Command to approve and add user data to the database
+# Command to approve and add user data to the database
 @app.on_message(filters.command("approve") & filters.user(admins))
 async def approve_data(client, message):
-    print("approve_data function called!")
-    if len(message.command) == 2:
-        user_id = int(message.command[1])
-        print("User ID to approve:", user_id)
+    if len(message.text.split()) == 2:
+        user_id = int(message.text.split()[1])
         user_data = verification_data.pop(user_id)
         await db.add_user(user_data['name'], user_data['username'], user_data['address'], user_data.get('nid_photo', ''), user_data.get('passport_photo', ''), user_data.get('jonmo_nibondon_photo', ''), user_data.get('selfie_photo', ''), user_data.get('verification_video', ''))
         await message.reply_text("User data approved and added to the database successfully!")
     else:
         await message.reply_text("Invalid command usage! Please use /approve <user_id>.")
-
-print("approve_data function registered!")
 
 # Command to disapprove user data
 @app.on_message(filters.command("disapprove") & filters.user(admins))
