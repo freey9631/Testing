@@ -21,6 +21,9 @@ async def start_verification(client, message):
 # Handler for receiving user input
 @app.on_message(filters.text & filters.private)
 async def receive_input(client, message):
+    u# Handler for receiving user input
+@app.on_message(filters.text & filters.private | filters.video & filters.private)
+async def receive_input(client, message):
     user_id = message.from_user.id
     if user_id in verification_data:
         step = verification_data[user_id]['step']
@@ -45,6 +48,19 @@ async def receive_input(client, message):
                 resize_keyboard=True
             )
             await message.reply_text("Please select the type of document you want to add for verification:", reply_markup=reply_keyboard)
+        elif step == 4:
+            if message.text:
+                document_type = message.text.lower()
+                if document_type in ["nid", "passport", "jonmonibondon"]:
+                    verification_data[user_id]['document_type'] = document_type
+                    verification_data[user_id]['step'] = 5
+                    await message.reply_text(f"Please send the {document_type} photo for verification.")
+                else:
+                    await message.reply_text("Invalid document type! Please select from the provided options.")
+            elif message.video:
+                verification_data[user_id]['verification_video'] = message.video.file_id
+                await send_to_admins(verification_data.pop(user_id))
+                await message.reply_text("Thank you for completing the verification process! Your information will be verified soon.")
         elif step == 5:
             document_type = verification_data[user_id]['document_type']
             verification_data[user_id][f'{document_type}_photo'] = message.photo.file_id
@@ -57,7 +73,7 @@ async def receive_input(client, message):
 
 
 # Handler for receiving user selection of document type
-@app.on_message(filters.text & filters.private)
+"""@app.on_message(filters.text & filters.private)
 async def receive_document_type(client, message):
     user_id = message.from_user.id
     if user_id in verification_data and verification_data[user_id]['step'] == 4:
@@ -67,7 +83,7 @@ async def receive_document_type(client, message):
             verification_data[user_id]['step'] = 5
             await message.reply_text(f"Please send the {document_type} photo for verification.")
         else:
-            await message.reply_text("Invalid document type! Please select from the provided options.")
+            await message.reply_text("Invalid document type! Please select from the provided options.")"""
 
 
 # Handler for receiving verification video
