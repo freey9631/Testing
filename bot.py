@@ -72,12 +72,13 @@ async def receive_input(client, message):
 async def send_to_admins(user_data):
     for admin_id in admins:
         await app.send_message(admin_id, f"New verification request:\n{user_data}")
+        
+print("Registering approve_data function...")
 
 # Command to approve and add user data to the database
 @app.on_message(filters.command("approve") & filters.user(admins))
 async def approve_data(client, message):
-    print("User ID:", message.from_user.id)
-    print("Command:", message.command)
+    print("approve_data function called!")
     if len(message.command) == 2:
         user_id = int(message.command[1])
         print("User ID to approve:", user_id)
@@ -86,6 +87,8 @@ async def approve_data(client, message):
         await message.reply_text("User data approved and added to the database successfully!")
     else:
         await message.reply_text("Invalid command usage! Please use /approve <user_id>.")
+
+print("approve_data function registered!")
 
 # Command to disapprove user data
 @app.on_message(filters.command("disapprove") & filters.user(admins))
