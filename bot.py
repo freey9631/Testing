@@ -19,9 +19,9 @@ async def start_verification(client, message):
 
 
 # Handler for receiving user input
-@app.on_message(filters.text & filters.private)
+"""@app.on_message(filters.text & filters.private)
 async def receive_input(client, message):
-    u# Handler for receiving user input
+    u# Handler for receiving user input"""
 @app.on_message(filters.text & filters.private | filters.video & filters.private)
 async def receive_input(client, message):
     user_id = message.from_user.id
@@ -42,8 +42,8 @@ async def receive_input(client, message):
             # Send normal keyboard to select document type
             reply_keyboard = ReplyKeyboardMarkup(
                 [
-                    [KeyboardButton("NiD"), KeyboardButton("Passport")],
-                    [KeyboardButton("JonmoNibondon")]
+                    [KeyboardButton("NID"), KeyboardButton("PASSPORT")],
+                    [KeyboardButton("JONMONIBONDON")]
                 ],
                 resize_keyboard=True
             )
