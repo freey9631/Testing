@@ -1,3 +1,6 @@
 pyrogram
 TgCrypto
 motor
+Flask
+gunicorn
+aiohttp
