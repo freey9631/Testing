@@ -76,8 +76,11 @@ async def send_to_admins(user_data):
 # Command to approve and add user data to the database
 @app.on_message(filters.command("approve") & filters.user(admins))
 async def approve_data(client, message):
+    print("User ID:", message.from_user.id)
+    print("Command:", message.command)
     if len(message.command) == 2:
         user_id = int(message.command[1])
+        print("User ID to approve:", user_id)
         user_data = verification_data.pop(user_id)
         await db.add_user(user_data['name'], user_data['username'], user_data['address'], user_data.get('nid_photo', ''), user_data.get('passport_photo', ''), user_data.get('jonmo_nibondon_photo', ''), user_data.get('selfie_photo', ''), user_data.get('verification_video', ''))
         await message.reply_text("User data approved and added to the database successfully!")
