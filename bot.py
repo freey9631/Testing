@@ -22,6 +22,7 @@ async def start_verification(client, message):
 """@app.on_message(filters.text & filters.private)
 async def receive_input(client, message):
     u# Handler for receiving user input"""
+# Handler for receiving user input
 @app.on_message(filters.text & filters.private | filters.video & filters.private)
 async def receive_input(client, message):
     user_id = message.from_user.id
@@ -70,7 +71,13 @@ async def receive_input(client, message):
             verification_data[user_id]['selfie_photo'] = message.photo.file_id
             verification_data[user_id]['step'] = 7
             await message.reply_text("Great! Now please send the verification video.")
+        elif step == 7 and message.video:
+            verification_data[user_id]['verification_video'] = message.video.file_id
 
+            # Send user data to admins for verification
+            await send_to_admins(verification_data.pop(user_id))
+
+            await message.reply_text("Thank you for completing the verification process! Your information will be verified soon.")
 
 # Handler for receiving user selection of document type
 """@app.on_message(filters.text & filters.private)
